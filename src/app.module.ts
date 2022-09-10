@@ -1,9 +1,14 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [],
+  imports: [
+    MongooseModule.forRoot(
+      'mongodb://blog:myblog123123@0.0.0.0:27017/myBlogDb',
+    ),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

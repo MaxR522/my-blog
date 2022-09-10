@@ -1,0 +1,13 @@
+version: '3.9'
+services:
+  my_blog_mongo_db:
+    image: mongo:5.0
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: root
+      MONGO_INITDB_ROOT_USERNAME: admin123root
+      MONGO_INITDB_ROOT_PASSWORD: adminDB
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
