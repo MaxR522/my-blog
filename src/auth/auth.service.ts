@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from 'src/schemas/user.schema';
+import { RegisterDto } from './dto/register.dto';
 
 /**
  * This service will handle authentication logic:
@@ -13,7 +14,7 @@ import { User, UserDocument } from 'src/schemas/user.schema';
 export class AuthService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  register() {
-    console.log(this.userModel?.schema);
+  register(registerDto: RegisterDto) {
+    console.log(registerDto);
   }
 }
