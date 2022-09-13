@@ -1,6 +1,6 @@
 # Authentication
 
-- [ ] DTO request validation
+- [x] DTO request validation
 - [ ] Register
 - [ ] Send email validation
 - [ ] handle email validation
