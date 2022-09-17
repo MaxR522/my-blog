@@ -4,6 +4,7 @@ import {
   IsString,
   Matches,
   MinLength,
+  ValidateIf,
 } from 'class-validator';
 
 export class RegisterDto {
@@ -19,5 +20,19 @@ export class RegisterDto {
     message:
       'Password must be at least 8 characters with one letter and one digits',
   })
+  password: string;
+}
+
+export class LoginDto {
+  @ValidateIf((schema) => !Boolean(schema.name))
+  @IsString()
+  email: string;
+
+  @ValidateIf((schema) => !Boolean(schema.email))
+  @IsString()
+  name: string;
+
+  @IsNotEmpty()
+  @IsString()
   password: string;
 }
