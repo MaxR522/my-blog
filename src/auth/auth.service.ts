@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  HttpException,
   HttpStatus,
   Injectable,
   NotFoundException,
@@ -12,12 +11,6 @@ import { User, UserDocument } from 'src/schemas/user.schema';
 import { LoginDto, RegisterDto } from './dto/auth.dto';
 import * as argon2 from 'argon2';
 
-/**
- * This service will handle authentication logic:
- * - Register
- * - Login
- * - Forgot password
- */
 @Injectable()
 export class AuthService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
