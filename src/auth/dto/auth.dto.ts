@@ -4,7 +4,6 @@ import {
   IsString,
   Matches,
   MinLength,
-  ValidateIf,
 } from 'class-validator';
 
 export class RegisterDto {
@@ -24,13 +23,9 @@ export class RegisterDto {
 }
 
 export class LoginDto {
-  @ValidateIf((schema) => !Boolean(schema.name))
+  @IsNotEmpty()
   @IsString()
   email: string;
-
-  @ValidateIf((schema) => !Boolean(schema.email))
-  @IsString()
-  name: string;
 
   @IsNotEmpty()
   @IsString()
