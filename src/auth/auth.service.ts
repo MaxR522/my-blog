@@ -1,4 +1,9 @@
-import { HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { LoginDto, RegisterDto } from './dto/auth.dto';
 import * as argon2 from 'argon2';
 import { UsersService } from 'src/users/users.service';
@@ -31,6 +36,15 @@ export class AuthService {
     const { email, password } = loginDto;
 
     const user = await this.usersService.findOneByEmail(email);
+
+    if (!user) {
+      throw new NotFoundException({
+        status: HttpStatus.NOT_FOUND,
+        error: {
+          message: 'User not found',
+        },
+      });
+    }
 
     const isPasswordMatching = await argon2.verify(user.password, password);
 
