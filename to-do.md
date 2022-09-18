@@ -11,3 +11,10 @@
     - [ ] find a way to invalidate the token
 - [ ] Send password forgot email
 - [ ] handle password forgot request from email (reset user's password)
+- [ ] users management module
+  - [x] create
+  - [x] find one by email
+  - [ ] find one by id
+  - [x] get all users
+  - [ ] update
+  - [ ] delete
