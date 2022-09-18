@@ -32,10 +32,16 @@ export class AuthService {
 
     const user = await this.usersService.findOneByEmail(email);
 
-    const isPasswordMatching = await this.validatePassword(
-      user.password,
-      password,
-    );
+    const isPasswordMatching = await argon2.verify(user.password, password);
+
+    if (!isPasswordMatching) {
+      throw new UnauthorizedException({
+        status: HttpStatus.UNAUTHORIZED,
+        error: {
+          message: 'Wrong credentials',
+        },
+      });
+    }
 
     if (isPasswordMatching) {
       return {
@@ -47,30 +53,5 @@ export class AuthService {
         },
       };
     }
-  }
-
-  /*****************************************************************************
-   ******************************  PRIVATE METHOD  *****************************
-   *****************************************************************************/
-
-  /**
-   * @description this method is used to validate the user's password by comparing the provided password from request and the stored password
-   * @param {string} userPassword the stored password
-   * @param {string} passwordDto the password from request
-   * @return {Boolean} `true` if valid password, else `false`
-   */
-  private async validatePassword(userPassword: string, passwordDto: string) {
-    const isPasswordMatching = await argon2.verify(userPassword, passwordDto);
-
-    if (!isPasswordMatching) {
-      throw new UnauthorizedException({
-        status: HttpStatus.UNAUTHORIZED,
-        error: {
-          message: 'Wrong credentials',
-        },
-      });
-    }
-
-    return isPasswordMatching;
   }
 }
