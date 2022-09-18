@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   HttpStatus,
   Injectable,
   NotFoundException,
@@ -10,49 +9,30 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from 'src/schemas/user.schema';
 import { LoginDto, RegisterDto } from './dto/auth.dto';
 import * as argon2 from 'argon2';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name)
+    private userModel: Model<UserDocument>,
+    private usersService: UsersService,
+  ) {}
 
   /*****************************************************************************
    *********************************  REGISTER  ********************************
    *****************************************************************************/
   async register(registerDto: RegisterDto) {
-    const { name, email, password } = registerDto;
+    const { _id, name, email } = await this.usersService.create(registerDto);
 
-    try {
-      const hash = await argon2.hash(password);
-
-      const newUser = new this.userModel({
+    return {
+      message: 'User created successfully',
+      data: {
+        _id,
         name,
         email,
-        password: hash,
-      });
-
-      const createdUser = await newUser.save();
-
-      return {
-        message: 'User created',
-        data: {
-          _id: createdUser?._id,
-          name: createdUser?.name,
-          email: createdUser?.email,
-        },
-      };
-    } catch (error) {
-      if (error?.code === 11000) {
-        throw new BadRequestException({
-          status: HttpStatus.BAD_REQUEST,
-          error: { ...error, message: 'Duplicate user' },
-        });
-      }
-
-      throw new BadRequestException({
-        status: HttpStatus.BAD_REQUEST,
-        error: error,
-      });
-    }
+      },
+    };
   }
 
   /*****************************************************************************
