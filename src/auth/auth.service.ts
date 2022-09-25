@@ -29,6 +29,21 @@ export class AuthService {
   }
 
   /*****************************************************************************
+   ******************************* VALIDATE USER  ******************************
+   *****************************************************************************/
+
+  async validateUser(email: string, password: string) {
+    const user = await this.usersService.findOneByEmail(email);
+    const isPasswordMatching = await argon2.verify(user.password, password);
+
+    if (isPasswordMatching) {
+      return user;
+    }
+
+    return null;
+  }
+
+  /*****************************************************************************
    ***********************************  LOGIN  *********************************
    *****************************************************************************/
 
